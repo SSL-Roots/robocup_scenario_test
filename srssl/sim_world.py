@@ -58,11 +58,20 @@ class SimWorld:
         """
         self._ball = [Ball(x, y, v_x, v_y)]
 
-    def set_robot(self, robot_id: int, is_yellow: bool,
+    def set_blue_robot(self, robot_id: int, x: float, y: float, orientation: float) -> None:
+        """
+        Set blue robot position and orientation.
+        """
+        self._set_robot(robot_id, False, x, y, orientation)
+
+    def set_yellow_robot(self, robot_id: int, x: float, y: float, orientation: float) -> None:
+        """
+        Set yellow robot position and orientation.
+        """
+        self._set_robot(robot_id, True, x, y, orientation)
+
+    def _set_robot(self, robot_id: int, is_yellow: bool,
                   x: float, y: float, orientation: float) -> None:
-        """
-        Set robot position and orientation.
-        """
         robot = Robot(id=robot_id, is_yellow=is_yellow, turn_on=True,
                       x=x, y=y, orientation=orientation)
         if is_yellow:
