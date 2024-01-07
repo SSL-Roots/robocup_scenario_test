@@ -12,11 +12,13 @@ function modify_import_path () {
     python_files=$(find $1 -name "*.py")
 
     for file in $python_files; do
+        echo "Modifying import path of $file"
         sed -i '/import.*pb2/ s/^/from . /' "$file"
     done
 }
 
 function compile () {
+    echo "Compiling $1"
     protoc -I=$1 --python_out=$1 $1/*.proto
     modify_import_path $1
 }
