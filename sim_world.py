@@ -1,7 +1,9 @@
 
+import math
+import sys
+
 from ball import Ball
 from robot import Robot
-import sys
 from typing import List
 from typing import Dict
 
@@ -18,8 +20,8 @@ class SimWorld:
 
     def __init__(self, field_length: float = 12.0, field_width: float = 9.0):
         self._ball: List[Ball] = []
-        self._blue_robots: List[Robot] = []
-        self._yellow_robots: List[Robot] = []
+        self._blue_robots: Dict[int, Robot] = {}
+        self._yellow_robots: Dict[int, Robot] = {}
         self._field_length = field_length
         self._field_width = field_width
 
@@ -30,10 +32,19 @@ class SimWorld:
         All robots are turned off.
         Ball is placed at (0, 0).
         """
-        empty_world = cls()
-        empty_world._ball = [Ball()]
-        empty_world._robots = empty_world._all_robots_turn_off()
-        return empty_world
+        world = cls()
+
+        OFFSET_X = 0.2
+        POS_X = 0.0
+        BLUE_POS_Y = -world._field_width / 2.0 - 0.5
+        YELLOW_POS_Y = BLUE_POS_Y - 0.2
+
+        world._ball = [Ball()]
+        world._blue_robots = world._all_robots_turn_off(
+            False, POS_X, BLUE_POS_Y, OFFSET_X, 0.0)
+        world._yellow_robots = world._all_robots_turn_off(
+            True, POS_X, YELLOW_POS_Y, OFFSET_X, 0.0)
+        return world
 
     def to_grsim_packet_string(self) -> bytes:
         """
@@ -43,25 +54,37 @@ class SimWorld:
         packet.replacement.CopyFrom(self._to_grsim_replacement())
         return packet.SerializeToString()
 
-    def set_ball(self, ball: Ball) -> None:
-        self._ball = [ball]
+    def set_ball(self, x: float, y: float, v_x: float, v_y: float) -> None:
+        """
+        Set ball position and velocity.
+        """
+        self._ball = [Ball(x, y, v_x, v_y)]
 
-    def _all_robots_turn_off(self) -> List[Robot]:
-        OFFSET_X = 0.2
-        OFFSET_Y = 0.2
-        POS_Y = -self._field_width / 2.0 - 0.5
-        robots = []
+    def set_robot(self, robot_id: int, is_yellow: bool,
+                  x: float, y: float, orientation: float) -> None:
+        """
+        Set robot position and orientation.
+        """
+        robot = Robot(id=robot_id, is_yellow=is_yellow, turn_on=True,
+                      x=x, y=y, orientation=orientation)
+        if is_yellow:
+            self._yellow_robots[robot_id] = robot
+        else:
+            self._blue_robots[robot_id] = robot
+
+    def _all_robots_turn_off(self, is_yellow, x, y, offset_x, offset_y) -> Dict[int, Robot]:
+        robots = {}
         for i in range(self.MAX_ROBOT_NUM):
-            pos_x = i * OFFSET_X
-            pos_y = POS_Y
-            robots.append(Robot(id=i, turn_on=False, is_yellow=False, x=pos_x, y=pos_y))
-            pos_y = POS_Y - OFFSET_Y
-            robots.append(Robot(id=i, turn_on=False, is_yellow=True, x=pos_x, y=pos_y))
+            pos_x = x + i * offset_x
+            pos_y = y + i * offset_y
+            robots[i] = Robot(id=i, turn_on=False, is_yellow=is_yellow, x=pos_x, y=pos_y)
         return robots
 
     def _to_grsim_replacement(self) -> grSim_Replacement:
         replacement = grSim_Replacement()
-        for robot in self._robots:
+        for robot in self._blue_robots.values():
+            replacement.robots.extend([self._to_grsim_replacement_robot(robot)])
+        for robot in self._yellow_robots.values():
             replacement.robots.extend([self._to_grsim_replacement_robot(robot)])
         for ball in self._ball:
             replacement.ball.CopyFrom(self._to_grsim_replacement_ball(ball))
@@ -79,7 +102,7 @@ class SimWorld:
         robot_replacement = grSim_RobotReplacement()
         robot_replacement.x = robot.x
         robot_replacement.y = robot.y
-        robot_replacement.dir = robot.orientation
+        robot_replacement.dir = math.degrees(robot.orientation)
         robot_replacement.id = robot.id
         robot_replacement.yellowteam = robot.is_yellow
         robot_replacement.turnon = robot.turn_on
