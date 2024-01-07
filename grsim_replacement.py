@@ -1,7 +1,6 @@
 import socket
 
 
-# UDP通信でgrSimに対してデータを送信するクラス
 class GrSimReplacement:
     def __init__(self, host, port):
         self.host = host
