@@ -42,4 +42,5 @@ class SimReferee:
         team_info.timeouts = 0
         team_info.timeout_time = 0
         team_info.goalkeeper = 0
+        team_info.max_allowed_bots = 11
         return team_info

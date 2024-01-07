@@ -52,7 +52,7 @@ class SimWorld:
         packet.replacement.CopyFrom(self._to_grsim_replacement())
         return packet.SerializeToString()
 
-    def set_ball(self, x: float, y: float, v_x: float, v_y: float) -> None:
+    def set_ball(self, x: float, y: float, v_x: float = 0.0, v_y: float = 0.0) -> None:
         """
         Set ball position and velocity.
         """
