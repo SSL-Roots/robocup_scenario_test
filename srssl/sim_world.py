@@ -71,7 +71,7 @@ class SimWorld:
         self._set_robot(robot_id, True, x, y, orientation)
 
     def _set_robot(self, robot_id: int, is_yellow: bool,
-                  x: float, y: float, orientation: float) -> None:
+                   x: float, y: float, orientation: float) -> None:
         robot = Robot(id=robot_id, is_yellow=is_yellow, turn_on=True,
                       x=x, y=y, orientation=orientation)
         if is_yellow:

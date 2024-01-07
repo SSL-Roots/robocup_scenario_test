@@ -48,7 +48,6 @@ class Communication:
             if data is not None:
                 vision_world.update_with_vision_packet(data)
                 self.observer.update(vision_world)
-            time.sleep(0.1)
 
     def _referee_update(self):
         while self._thread_running:
