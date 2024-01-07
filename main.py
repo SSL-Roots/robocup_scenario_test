@@ -2,6 +2,8 @@
 # coding: UTF-8
 
 from grsim_replacement import GrSimReplacement
+from referee_sender import RefereeSender
+from sim_referee import SimReferee
 from sim_world import SimWorld
 from vision_receiver import VisionReceiver
 from vision_world import VisionWorld
@@ -21,8 +23,7 @@ def set_sim_world():
 
     sender.send(world.to_grsim_packet_string())
 
-
-if __name__ == '__main__':
+def observe_goal():
     receiver = VisionReceiver('224.5.23.2', 10006)
     vision_world = VisionWorld()
     observer = WorldObserver()
@@ -35,3 +36,10 @@ if __name__ == '__main__':
             observer.update(vision_world)
             print("we_got_the_goal: {}".format(observer.we_got_the_goal()))
 
+
+if __name__ == '__main__':
+    sender = RefereeSender('224.5.23.1', 10003)
+    referee = SimReferee()
+
+    referee.set_command("HALT")
+    sender.send(referee.to_referee_packet_string())

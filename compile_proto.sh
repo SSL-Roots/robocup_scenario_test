@@ -8,4 +8,5 @@ function compile () {
 cd $(dirname $0)
 
 compile ./proto/grsim
+compile ./proto/referee
 compile ./proto/vision
