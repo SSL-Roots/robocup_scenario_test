@@ -1,18 +1,16 @@
 
 import math
 import sys
-
-from ball import Ball
-from robot import Robot
 from typing import List
 from typing import Dict
 
-sys.path.append("./proto/grsim")
-from proto.grsim import grSim_Packet_pb2 as grsim_packet
-from proto.grsim.grSim_Replacement_pb2 import grSim_Replacement
-from proto.grsim.grSim_Replacement_pb2 import grSim_RobotReplacement
-from proto.grsim.grSim_Replacement_pb2 import grSim_BallReplacement
+from .ball import Ball
+from .robot import Robot
 
+from .proto.grsim import grSim_Packet_pb2 as grsim_packet
+from .proto.grsim.grSim_Replacement_pb2 import grSim_Replacement
+from .proto.grsim.grSim_Replacement_pb2 import grSim_RobotReplacement
+from .proto.grsim.grSim_Replacement_pb2 import grSim_BallReplacement
 
 
 class SimWorld:

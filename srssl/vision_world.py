@@ -1,16 +1,14 @@
 
-import sys
-
-from ball import Ball
-from robot import Robot
 from typing import List
 from typing import Dict
 
-sys.path.append("./proto/vision")
-from proto.vision.ssl_vision_wrapper_pb2 import SSL_WrapperPacket
-from proto.vision.ssl_vision_detection_pb2 import SSL_DetectionFrame
-from proto.vision.ssl_vision_detection_pb2 import SSL_DetectionBall
-from proto.vision.ssl_vision_detection_pb2 import SSL_DetectionRobot
+from .ball import Ball
+from .robot import Robot
+
+from .proto.vision.ssl_vision_wrapper_pb2 import SSL_WrapperPacket
+from .proto.vision.ssl_vision_detection_pb2 import SSL_DetectionFrame
+from .proto.vision.ssl_vision_detection_pb2 import SSL_DetectionBall
+from .proto.vision.ssl_vision_detection_pb2 import SSL_DetectionRobot
 
 
 class VisionWorld:

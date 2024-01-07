@@ -1,8 +1,6 @@
 
-from ball import Ball
-from vision_world import VisionWorld
-
-import math
+from .ball import Ball
+from .vision_world import VisionWorld
 
 
 class WorldObserver:

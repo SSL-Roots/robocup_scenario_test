@@ -1,6 +1,7 @@
 
 from typing import List
 
+
 class Robot:
     def __init__(self, x: float = 0.0, y: float = 0.0, orientation: float = 0.0,
                  is_yellow: bool = False, id: int = 0, turn_on: bool = True) -> None:

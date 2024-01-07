@@ -1,9 +1,7 @@
 
-import sys
 import time
 
-sys.path.append("./proto/referee")
-from proto.referee.ssl_gc_referee_message_pb2 import Referee
+from .proto.referee.ssl_gc_referee_message_pb2 import Referee
 
 
 class SimReferee:
