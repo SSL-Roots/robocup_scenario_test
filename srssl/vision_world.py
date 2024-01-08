@@ -8,7 +8,6 @@ from .robot import Robot
 from .proto.vision.ssl_vision_wrapper_pb2 import SSL_WrapperPacket
 from .proto.vision.ssl_vision_detection_pb2 import SSL_DetectionFrame
 from .proto.vision.ssl_vision_detection_pb2 import SSL_DetectionBall
-from .proto.vision.ssl_vision_detection_pb2 import SSL_DetectionRobot
 
 
 class VisionWorld:
