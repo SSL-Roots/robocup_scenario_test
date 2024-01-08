@@ -1,12 +1,12 @@
 from setuptools import setup, find_packages
-from setuptools.command.install import install
+from setuptools.command.build_py import build_py
 import subprocess
 
 
-class CustomInstallCommand(install):
+class CustomBuildPy(build_py):
     def run(self):
         subprocess.run('./srssl/compile_proto.sh', check=True)
-        install.run(self)
+        build_py.run(self)
 
 
 setup(
@@ -38,6 +38,6 @@ setup(
         "Programming Language :: Python :: 3.8",
     ],
     cmdclass={
-        'install': CustomInstallCommand,
+        'build_py': CustomBuildPy
     }
 )
