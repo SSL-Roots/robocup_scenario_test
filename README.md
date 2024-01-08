@@ -1,11 +1,20 @@
 
 # Simple RoboCup SSL Library
 
-Simple python library for RoboCup SSL.
+Simple python library for RoboCup SSL (`srssl`).
+
+## Requirements
+
+- [Google Protobuf Compiler](https://github.com/protocolbuffers/protobuf)
+  - The `protoc` command is required during `srssl` installation.
 
 ## Installation
 
 ```bash
+# Install Google Protobuf Compiler
+sudo apt install protobuf-compiler
+
+# Install srssl
 pip install git+https://github.com/SSL-Roots/simple_robocup_ssl
 ```
 

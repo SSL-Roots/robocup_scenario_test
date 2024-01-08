@@ -18,9 +18,6 @@ setup(
     license='LICENSE',
     description='Simple Python library for RoboCup SSL',
     long_description=open('README.md').read(),
-    install_requires=[
-        "protobuf >= 3.12",
-    ],
     extras_require={
         'dev': [
             'flake8 >= 3.7.9',
