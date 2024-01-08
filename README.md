@@ -2,6 +2,7 @@
 # Simple RoboCup SSL Library
 
 [![Python application](https://github.com/SSL-Roots/simple_robocup_ssl/actions/workflows/python-app.yml/badge.svg)](https://github.com/SSL-Roots/simple_robocup_ssl/actions/workflows/python-app.yml)
+[![codecov](https://codecov.io/gh/SSL-Roots/simple_robocup_ssl/graph/badge.svg?token=8MWSNFAOG9)](https://codecov.io/gh/SSL-Roots/simple_robocup_ssl)
 
 Simple python library for RoboCup SSL (`srssl`).
 
