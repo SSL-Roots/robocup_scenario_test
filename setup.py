@@ -19,7 +19,7 @@ setup(
     description='Simple Python library for RoboCup SSL',
     long_description=open('README.md').read(),
     install_requires=[
-        "protobuf >= 3.12",
+        "protobuf <= 3.20",
     ],
     extras_require={
         'dev': [
