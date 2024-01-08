@@ -1,18 +1,16 @@
-from setuptools.command.install import install as InstallCommand
+# This file defines a custom installation procedure for the package.
+from setuptools import setup
+from setuptools.command.install import install
 import subprocess
-from setuptools import setup, find_packages
 
 
-class CustomInstallCommand(InstallCommand):
+class CustomInstallCommand(install):
     def run(self):
-        subprocess.run('./srssl/compile_proto.sh', shell=True)
-        InstallCommand.run(self)
+        subprocess.run('./srssl/compile_proto.sh', check=True)
+        install.run(self)
 
 
 setup(
-    name='srssl',
-    version='0.1.0',
-    packages=find_packages(),
     cmdclass={
         'install': CustomInstallCommand,
     }
