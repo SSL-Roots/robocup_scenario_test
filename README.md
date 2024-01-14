@@ -2,7 +2,7 @@
 # RoboCup Scenario Test Python Library
 
 [![Python application](https://github.com/SSL-Roots/simple_robocup_ssl/actions/workflows/python-app.yml/badge.svg)](https://github.com/SSL-Roots/simple_robocup_ssl/actions/workflows/python-app.yml)
-[![codecov](https://codecov.io/gh/SSL-Roots/simple_robocup_ssl/graph/badge.svg?token=8MWSNFAOG9)](https://codecov.io/gh/SSL-Roots/simple_robocup_ssl)
+[![codecov](https://codecov.io/gh/SSL-Roots/robocup_scenario_test/graph/badge.svg?token=8MWSNFAOG9)](https://codecov.io/gh/SSL-Roots/robocup_scenario_test)
 
 Python library for RoboCup SSL scenario test.
 
