@@ -40,5 +40,10 @@ setup(
     ],
     cmdclass={
         'build_py': CustomBuildPy
-    }
+    },
+    entry_points={
+        'pytest11': [
+            'pytest-rcst = pytest_rcst.plugin',
+        ],
+    },
 )

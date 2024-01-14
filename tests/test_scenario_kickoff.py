@@ -2,20 +2,11 @@
 import math
 import time
 
-from rcst.communication import Communication
 from rcst.sim_world import SimWorld
 
 
-def change_referee_command(comm: Communication, command: str, sleep_time: float):
-    print("Change referee command to {}".format(command))
-    comm.referee.set_command(command)
-    time.sleep(sleep_time)
-
-
-def test_our_kickoff():
-    comm = Communication()
-    comm.start_thread()
-    change_referee_command(comm, 'HALT', 0.1)
+def test_our_kickoff(comm, change_referee_command):
+    change_referee_command('HALT', 0.1)
 
     world = SimWorld.make_empty_world()
     world.set_ball(0, 0)
@@ -24,19 +15,16 @@ def test_our_kickoff():
     time.sleep(3)  # Wait for the robots to be placed.
 
     comm.observer.reset()
-    change_referee_command(comm, 'STOP', 3)
-    change_referee_command(comm, 'PREPARE_KICKOFF_BLUE', 3)
-    change_referee_command(comm, 'NORMAL_START', 5)
-    change_referee_command(comm, 'HALT', 0.1)
+    change_referee_command('STOP', 3)
+    change_referee_command('PREPARE_KICKOFF_BLUE', 3)
+    change_referee_command('NORMAL_START', 5)
+    change_referee_command('HALT', 0.1)
 
-    comm.stop_thread()
     assert comm.observer.ball_has_been_in_positive_goal() is True
 
 
-def test_their_kickoff():
-    comm = Communication()
-    comm.start_thread()
-    change_referee_command(comm, 'HALT', 0.1)
+def test_their_kickoff(comm, change_referee_command):
+    change_referee_command('HALT', 0.1)
 
     world = SimWorld.make_empty_world()
     world.set_ball(0, 0)
@@ -46,9 +34,9 @@ def test_their_kickoff():
     time.sleep(3)  # Wait for the robots to be placed.
 
     comm.observer.reset()
-    change_referee_command(comm, 'STOP', 3)
-    change_referee_command(comm, 'PREPARE_KICKOFF_YELLOW', 3)
-    change_referee_command(comm, 'NORMAL_START', 1)
+    change_referee_command('STOP', 3)
+    change_referee_command('PREPARE_KICKOFF_YELLOW', 3)
+    change_referee_command('NORMAL_START', 1)
 
     # Shoot to our goal.
     world = SimWorld()
@@ -56,7 +44,6 @@ def test_their_kickoff():
     comm.send_replacement(world)
     time.sleep(5)
 
-    change_referee_command(comm, 'HALT', 0.1)
+    change_referee_command('HALT', 0.1)
 
-    comm.stop_thread()
     assert comm.observer.ball_has_been_in_negative_goal() is False
