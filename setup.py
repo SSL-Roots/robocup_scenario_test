@@ -5,12 +5,12 @@ import subprocess
 
 class CustomBuildPy(build_py):
     def run(self):
-        subprocess.run('./srssl/compile_proto.sh', check=True)
+        subprocess.run('./rcst/compile_proto.sh', check=True)
         build_py.run(self)
 
 
 setup(
-    name='srssl',
+    name='rcst',
     version='0.1.0',
     author='Shotak Aoki',
     author_email='macakasit@gmail.com',

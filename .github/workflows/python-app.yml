@@ -38,7 +38,7 @@ jobs:
         flake8 .
 
     - name: Run tests and collect coverage
-      run: pytest --cov=srssl tests/test_world_observer.py --cov-report=xml
+      run: pytest --cov=rcst tests/test_world_observer.py --cov-report=xml
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3

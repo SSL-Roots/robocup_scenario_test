@@ -1,15 +1,17 @@
 
-# Simple RoboCup SSL Library
+# RoboCup Scenario Test Python Library
 
 [![Python application](https://github.com/SSL-Roots/simple_robocup_ssl/actions/workflows/python-app.yml/badge.svg)](https://github.com/SSL-Roots/simple_robocup_ssl/actions/workflows/python-app.yml)
 [![codecov](https://codecov.io/gh/SSL-Roots/simple_robocup_ssl/graph/badge.svg?token=8MWSNFAOG9)](https://codecov.io/gh/SSL-Roots/simple_robocup_ssl)
 
-Simple python library for RoboCup SSL (`srssl`).
+Python library for RoboCup SSL scenario test.
+
+The library name `rcst` stands for "RoboCup Scenario Test".
 
 ## Requirements
 
 - [Google Protobuf Compiler](https://github.com/protocolbuffers/protobuf)
-  - The `protoc` command is required during `srssl` installation.
+  - The `protoc` command is required during `rcst` installation.
 
 ## Installation
 
@@ -17,8 +19,8 @@ Simple python library for RoboCup SSL (`srssl`).
 # Install Google Protobuf Compiler
 sudo apt install protobuf-compiler
 
-# Install srssl
-pip install git+https://github.com/SSL-Roots/simple_robocup_ssl
+# Install rcst
+pip install git+https://github.com/SSL-Roots/robocup_scenario_test
 ```
 
 ## Linting
@@ -28,7 +30,7 @@ This project uses [flake8](https://flake8.pycqa.org/en/latest/) for linting.
 Settings for flake8 are in [setup.cfg](setup.cfg).
 
 ```bash
-cd simple_robocup_ssl
+cd robocup_scenario_test
 flake8 .
 ```
 

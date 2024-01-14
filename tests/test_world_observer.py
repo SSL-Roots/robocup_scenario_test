@@ -1,7 +1,7 @@
 
-from srssl.ball import Ball
-from srssl.vision_world import VisionWorld
-from srssl.world_observer import WorldObserver
+from rcst.ball import Ball
+from rcst.vision_world import VisionWorld
+from rcst.world_observer import WorldObserver
 
 
 def test_ball_has_been_in_goal():

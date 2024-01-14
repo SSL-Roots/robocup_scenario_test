@@ -2,8 +2,8 @@
 import math
 import time
 
-from srssl.communication import Communication
-from srssl.sim_world import SimWorld
+from rcst.communication import Communication
+from rcst.sim_world import SimWorld
 
 
 def change_referee_command(comm: Communication, command: str, sleep_time: float):
