@@ -24,7 +24,7 @@ setup(
     extras_require={
         'dev': [
             'flake8 >= 3.7.9',
-            'pytest >= 5.4.1',
+            'pytest >= 5.4.1, <8.0.0',
             'pytest-cov >= 3.0.0',
         ]
     },
