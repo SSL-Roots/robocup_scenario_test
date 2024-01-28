@@ -1,7 +1,6 @@
 
 import threading
 import time
-from typing import Any
 
 from .grsim_replacement import GrSimReplacement
 from .referee_sender import RefereeSender
