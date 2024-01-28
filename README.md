@@ -23,6 +23,36 @@ sudo apt install protobuf-compiler
 pip install git+https://github.com/SSL-Roots/robocup_scenario_test
 ```
 
+## Usage
+
+This library provides a plugin for [pytest](https://docs.pytest.org/en/stable/).
+
+So, you can test your scenario like this:
+
+```python
+import math
+import time
+
+from rcst.sim_world import SimWorld
+
+
+def test_our_kickoff(rcst_comm):
+    world = SimWorld.make_empty_world()
+    world.set_ball(0, 0)
+    world.set_blue_robot(1, -0.5, 0.0, math.radians(0))
+    rcst_comm.send_replacement(world)
+    time.sleep(3)  # Wait for the robots to be placed.
+
+    rcst_comm.observer.reset()
+    rcst_comm.change_referee_command('STOP', 3.0)
+    rcst_comm.change_referee_command('PREPARE_KICKOFF_BLUE', 3.0)
+    rcst_comm.change_referee_command('NORMAL_START', 5.0)
+
+    assert rcst_comm.observer.ball_has_been_in_positive_goal() is True
+```
+
+More examples are in [examples](examples).
+
 ## Linting
 
 This project uses [flake8](https://flake8.pycqa.org/en/latest/) for linting.
