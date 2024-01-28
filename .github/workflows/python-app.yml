@@ -47,13 +47,13 @@ jobs:
       run: pytest tests/test_world_observer.py --cov=rcst --cov-report=xml --cov-append
 
     - name: Start Docker Compose services
-      run: docker compose -f .github/workflows/consai-grsim-compose.yml up -d
+      run: docker compose -f .docker/consai-grsim-compose.yml up -d
 
     - name: Run scenario tests
       run: pytest tests/test_scenario_kickoff.py --vision_port=10020 --cov=rcst --cov-report=xml --cov-append
 
     - name: Clean up Docker Compose services
-      run: docker compose -f .github/workflows/consai-grsim-compose.yml down
+      run: docker compose -f .docker/consai-grsim-compose.yml down
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
