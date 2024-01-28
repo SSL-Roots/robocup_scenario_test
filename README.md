@@ -33,14 +33,11 @@ So, you can test your scenario like this:
 import math
 import time
 
-from rcst.sim_world import SimWorld
-
 
 def test_our_kickoff(rcst_comm):
-    world = SimWorld.make_empty_world()
-    world.set_ball(0, 0)
-    world.set_blue_robot(1, -0.5, 0.0, math.radians(0))
-    rcst_comm.send_replacement(world)
+    rcst_comm.send_empty_world()
+    rcst_comm.send_ball(0, 0)
+    rcst_comm.send_blue_robot(1, -0.5, 0.0, math.radians(0))
     time.sleep(3)  # Wait for the robots to be placed.
 
     rcst_comm.observer.reset()
