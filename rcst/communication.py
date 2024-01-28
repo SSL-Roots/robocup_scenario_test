@@ -41,6 +41,11 @@ class Communication:
         self._vision_thread.join()
         self._referee_thread.join()
 
+    def change_referee_command(self, command: str, sleep_time: float):
+        print("Change referee command to {}, and wait {} seconds.".format(command, sleep_time))
+        self.referee.set_command(command)
+        time.sleep(sleep_time)
+
     def _vision_update(self):
         vision_world = VisionWorld()
         while self._thread_running:
