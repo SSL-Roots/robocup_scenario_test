@@ -1,6 +1,7 @@
 
 import threading
 import time
+from typing import Any
 
 from .grsim_replacement import GrSimReplacement
 from .referee_sender import RefereeSender
@@ -44,6 +45,38 @@ class Communication:
     def change_referee_command(self, command: str, sleep_time: float):
         print("Change referee command to {}, and wait {} seconds.".format(command, sleep_time))
         self.referee.set_command(command)
+        time.sleep(sleep_time)
+
+    def send_empty_world(self, sleep_time: float = 0.1):
+        print("Send empty world.")
+        world = SimWorld.make_empty_world()
+        self.send_replacement(world)
+        time.sleep(sleep_time)
+
+    def send_ball(self, x: float, y: float, v_x: float = 0.0, v_y: float = 0.0,
+                  sleep_time: float = 0.1):
+        print("Send ball at ({}, {}) with velocity ({}, {}).".format(x, y, v_x, v_y))
+        world = SimWorld()
+        world.set_ball(x, y, v_x, v_y)
+        self.send_replacement(world)
+        time.sleep(sleep_time)
+
+    def send_blue_robot(self, robot_id: int, x: float, y: float, orientation: float,
+                        sleep_time: float = 0.1):
+        print("Send blue robot {} at ({}, {}) with orientation {}.".format(
+            robot_id, x, y, orientation))
+        world = SimWorld()
+        world.set_blue_robot(robot_id, x, y, orientation)
+        self.send_replacement(world)
+        time.sleep(sleep_time)
+
+    def send_yellow_robot(self, robot_id: int, x: float, y: float, orientation: float,
+                          sleep_time: float = 0.1):
+        print("Send yellow robot {} at ({}, {}) with orientation {}.".format(
+            robot_id, x, y, orientation))
+        world = SimWorld()
+        world.set_yellow_robot(robot_id, x, y, orientation)
+        self.send_replacement(world)
         time.sleep(sleep_time)
 
     def _vision_update(self):
