@@ -12,9 +12,8 @@ def change_referee_command(comm: Communication, command: str, sleep_time: float)
     time.sleep(sleep_time)
 
 
-def test_our_kickoff():
-    comm = Communication()
-    comm.start_thread()
+def test_our_kickoff(rcst_comm):
+    comm = rcst_comm
     change_referee_command(comm, 'HALT', 0.1)
 
     world = SimWorld.make_empty_world()
@@ -29,13 +28,11 @@ def test_our_kickoff():
     change_referee_command(comm, 'NORMAL_START', 5)
     change_referee_command(comm, 'HALT', 0.1)
 
-    comm.stop_thread()
     assert comm.observer.ball_has_been_in_positive_goal() is True
 
 
-def test_their_kickoff():
-    comm = Communication()
-    comm.start_thread()
+def test_their_kickoff(rcst_comm):
+    comm = rcst_comm
     change_referee_command(comm, 'HALT', 0.1)
 
     world = SimWorld.make_empty_world()
@@ -58,5 +55,4 @@ def test_their_kickoff():
 
     change_referee_command(comm, 'HALT', 0.1)
 
-    comm.stop_thread()
     assert comm.observer.ball_has_been_in_negative_goal() is False
