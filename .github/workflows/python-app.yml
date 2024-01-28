@@ -21,6 +21,12 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+      docker:
+        image: docker/compose:1.29.2
+        ports:
+          - 80:80
+
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.10
@@ -37,8 +43,17 @@ jobs:
       run: |
         flake8 .
 
-    - name: Run tests and collect coverage
-      run: pytest --cov=rcst tests/test_world_observer.py --cov-report=xml
+    - name: Run unit tests
+      run: pytest tests/test_world_observer.py --cov=rcst --cov-report=xml --cov-append
+
+    - name: Start Docker Compose services
+      run: docker compose -f .github/workflows/consai-grsim-compose.yml up -d
+
+    - name: Run scenario tests
+      run: pytest tests/test_scenario_kickoff.py --vision_port=10020 --cov=rcst --cov-report=xml --cov-append
+
+    - name: Clean up Docker Compose services
+      run: docker compose -f .docker/workflows/consai-grsim-compose.yml down
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
