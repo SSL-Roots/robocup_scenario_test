@@ -28,4 +28,3 @@ class SimSender:
         except Exception as e:
             print(e)
             print("Failed to send message to simulator")
-
