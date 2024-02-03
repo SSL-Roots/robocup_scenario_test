@@ -15,7 +15,6 @@
 import threading
 import time
 
-from .grsim_replacement import GrSimReplacement
 from .referee_sender import RefereeSender
 from .sim_referee import SimReferee
 from .sim_sender import SimSender
@@ -29,7 +28,6 @@ class Communication:
     def __init__(self,
                  vision_addr: str = '224.5.23.2', vision_port: int = 10006,
                  referee_addr: str = '224.5.23.1', referee_port: int = 10003,
-                 grsim_addr: str = 'localhost', grsim_port: int = 20011,
                  sim_addr: str = 'localhost', sim_port: int = 10300
                  ):
         self.observer = WorldObserver()
@@ -37,15 +35,11 @@ class Communication:
 
         self._receiver = VisionReceiver(vision_addr, vision_port)
         self._ref_sender = RefereeSender(referee_addr, referee_port)
-        self._grsim_replacement = GrSimReplacement(grsim_addr, grsim_port)
         self._sim_sender = SimSender(sim_addr, sim_port)
         self._vision_thread = threading.Thread(target=self._vision_update)
         self._referee_thread = threading.Thread(target=self._referee_update)
 
         self._thread_running = True
-
-    def send_replacement(self, world: SimWorld):
-        self._grsim_replacement.send(world.to_grsim_packet_string())
 
     def send_simulator_command(self, world: SimWorld):
         self._sim_sender.send(world.to_sim_command_packet_string())
@@ -85,7 +79,7 @@ class Communication:
             robot_id, x, y, orientation))
         world = SimWorld()
         world.set_blue_robot(robot_id, x, y, orientation)
-        self.send_replacement(world)
+        self.send_simulator_command(world)
         time.sleep(sleep_time)
 
     def send_yellow_robot(self, robot_id: int, x: float, y: float, orientation: float,
@@ -94,7 +88,7 @@ class Communication:
             robot_id, x, y, orientation))
         world = SimWorld()
         world.set_yellow_robot(robot_id, x, y, orientation)
-        self.send_replacement(world)
+        self.send_simulator_command(world)
         time.sleep(sleep_time)
 
     def _vision_update(self):
