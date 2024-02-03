@@ -19,10 +19,16 @@ from typing import Dict
 from .ball import Ball
 from .robot import Robot
 
-from .proto.grsim import grSim_Packet_pb2 as grsim_packet
-from .proto.grsim.grSim_Replacement_pb2 import grSim_Replacement
-from .proto.grsim.grSim_Replacement_pb2 import grSim_RobotReplacement
-from .proto.grsim.grSim_Replacement_pb2 import grSim_BallReplacement
+from .proto import grSim_Packet_pb2 as grsim_packet
+from .proto.grSim_Replacement_pb2 import grSim_Replacement
+from .proto.grSim_Replacement_pb2 import grSim_RobotReplacement
+from .proto.grSim_Replacement_pb2 import grSim_BallReplacement
+
+from .proto.ssl_simulation_control_pb2 import SimulatorCommand
+from .proto.ssl_simulation_control_pb2 import SimulatorControl
+from .proto.ssl_simulation_control_pb2 import TeleportBall
+from .proto.ssl_simulation_control_pb2 import TeleportRobot
+from .proto.ssl_gc_common_pb2 import Team
 
 
 class SimWorld:
@@ -55,6 +61,14 @@ class SimWorld:
         world._yellow_robots = world._all_robots_turn_off(
             True, POS_X, YELLOW_POS_Y, OFFSET_X, 0.0)
         return world
+
+    def to_sim_command_packet_string(self) -> bytes:
+        """
+        Convert this world to a simulator command packet string.
+        """
+        command = SimulatorCommand()
+        command.control.CopyFrom(self._to_sim_control())
+        return command.SerializeToString()
 
     def to_grsim_packet_string(self) -> bytes:
         """
@@ -98,6 +112,34 @@ class SimWorld:
             pos_y = y + i * offset_y
             robots[i] = Robot(id=i, turn_on=False, is_yellow=is_yellow, x=pos_x, y=pos_y)
         return robots
+
+    def _to_sim_control(self) -> SimulatorControl:
+        control = SimulatorControl()
+        for ball in self._ball:
+            control.teleport_ball.CopyFrom(self._to_sim_teleport_ball(ball))
+        for robot in self._blue_robots.values():
+            control.teleport_robot.extend([self._to_sim_teleport_robot(robot)])
+        for robot in self._yellow_robots.values():
+            control.teleport_robot.extend([self._to_sim_teleport_robot(robot)])
+        return control
+
+    def _to_sim_teleport_ball(self, ball: Ball) -> TeleportBall:
+        ball_teleport = TeleportBall()
+        ball_teleport.x = ball.x
+        ball_teleport.y = ball.y
+        ball_teleport.vx = ball.v_x
+        ball_teleport.vy = ball.v_y
+        return ball_teleport
+
+    def _to_sim_teleport_robot(self, robot: Robot) -> TeleportRobot:
+        robot_teleport = TeleportRobot()
+        robot_teleport.id.id = robot.id
+        robot_teleport.id.team = Team.BLUE if not robot.is_yellow else Team.YELLOW
+        robot_teleport.x = robot.x
+        robot_teleport.y = robot.y
+        robot_teleport.orientation = robot.orientation
+        robot_teleport.present = robot.turn_on
+        return robot_teleport
 
     def _to_grsim_replacement(self) -> grSim_Replacement:
         replacement = grSim_Replacement()

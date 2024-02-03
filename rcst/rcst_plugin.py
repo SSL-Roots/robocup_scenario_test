@@ -29,6 +29,10 @@ def pytest_addoption(parser):
                      help="grSim address")
     parser.addoption("--grsim_port", action="store", default="20011",
                      help="grSim port")
+    parser.addoption("--sim_addr", action="store", default="127.0.0.1",
+                     help="Simulator address")
+    parser.addoption("--sim_port", action="store", default="10300",
+                     help="Simulator port")
 
 
 @pytest.fixture
@@ -39,7 +43,9 @@ def rcst_config(request):
         "referee_addr": request.config.getoption("--referee_addr"),
         "referee_port": int(request.config.getoption("--referee_port")),
         "grsim_addr": request.config.getoption("--grsim_addr"),
-        "grsim_port": int(request.config.getoption("--grsim_port"))
+        "grsim_port": int(request.config.getoption("--grsim_port")),
+        "sim_addr": request.config.getoption("--sim_addr"),
+        "sim_port": int(request.config.getoption("--sim_port"))
     }
 
 
@@ -51,7 +57,9 @@ def rcst_comm(rcst_config):
         referee_addr=rcst_config["referee_addr"],
         referee_port=rcst_config["referee_port"],
         grsim_addr=rcst_config["grsim_addr"],
-        grsim_port=rcst_config["grsim_port"]
+        grsim_port=rcst_config["grsim_port"],
+        sim_addr=rcst_config["sim_addr"],
+        sim_port=rcst_config["sim_port"]
     )
     comm_instance.start_thread()
     comm_instance.change_referee_command('HALT', 0.1)

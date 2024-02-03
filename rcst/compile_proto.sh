@@ -13,7 +13,8 @@ function modify_import_path () {
 
     for file in $python_files; do
         echo "Modifying import path of $file"
-        sed -i '/import.*pb2/ s/^/from . /' "$file"
+        # Ignore lines starting with "from"
+        sed -i '/^from/!s/import \(.*\)_pb2/from . import \1_pb2/' "$file"
     done
 }
 
@@ -25,6 +26,4 @@ function compile () {
 
 cd $(dirname $0)
 
-compile ./proto/grsim
-compile ./proto/referee
-compile ./proto/vision
+compile ./proto
