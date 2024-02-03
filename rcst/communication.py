@@ -41,6 +41,10 @@ class Communication:
 
         self._thread_running = True
 
+        print("vision_addr: {}, vision_port: {}".format(vision_addr, vision_port))
+        print("referee_addr: {}, referee_port: {}".format(referee_addr, referee_port))
+        print("sim_addr: {}, sim_port: {}".format(sim_addr, sim_port))
+
     def send_simulator_command(self, world: SimWorld):
         self._sim_sender.send(world.to_sim_command_packet_string())
 
