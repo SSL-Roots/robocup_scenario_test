@@ -20,7 +20,7 @@ The library name `rcst` stands for "RoboCup Scenario Test".
 sudo apt install protobuf-compiler
 
 # Install rcst
-pip install git+https://github.com/SSL-Roots/robocup_scenario_test
+pip install -v git+https://github.com/SSL-Roots/robocup_scenario_test
 ```
 
 ## Usage
