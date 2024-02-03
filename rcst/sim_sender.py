@@ -15,16 +15,16 @@
 import socket
 
 
-class GrSimReplacement:
+class SimSender:
     def __init__(self, host, port):
         self.host = host
         self.port = port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    def send(self, msg):
+    def send(self, msg: bytes):
         try:
             self.sock.sendto(msg, (self.host, self.port))
-            print("Sent message to grSim")
+            print("Sent message to simulator")
         except Exception as e:
             print(e)
-            print("Failed to send message to grSim")
+            print("Failed to send message to simulator")

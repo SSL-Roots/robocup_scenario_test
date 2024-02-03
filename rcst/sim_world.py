@@ -12,17 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import math
 from typing import List
 from typing import Dict
 
 from .ball import Ball
 from .robot import Robot
 
-from .proto.grsim import grSim_Packet_pb2 as grsim_packet
-from .proto.grsim.grSim_Replacement_pb2 import grSim_Replacement
-from .proto.grsim.grSim_Replacement_pb2 import grSim_RobotReplacement
-from .proto.grsim.grSim_Replacement_pb2 import grSim_BallReplacement
+from .proto.ssl_simulation_control_pb2 import SimulatorCommand
+from .proto.ssl_simulation_control_pb2 import SimulatorControl
+from .proto.ssl_simulation_control_pb2 import TeleportBall
+from .proto.ssl_simulation_control_pb2 import TeleportRobot
+from .proto.ssl_gc_common_pb2 import Team
 
 
 class SimWorld:
@@ -56,13 +56,13 @@ class SimWorld:
             True, POS_X, YELLOW_POS_Y, OFFSET_X, 0.0)
         return world
 
-    def to_grsim_packet_string(self) -> bytes:
+    def to_sim_command_packet_string(self) -> bytes:
         """
-        Convert this world to a grSim packet string.
+        Convert this world to a simulator command packet string.
         """
-        packet = grsim_packet.grSim_Packet()
-        packet.replacement.CopyFrom(self._to_grsim_replacement())
-        return packet.SerializeToString()
+        command = SimulatorCommand()
+        command.control.CopyFrom(self._to_sim_control())
+        return command.SerializeToString()
 
     def set_ball(self, x: float, y: float, v_x: float = 0.0, v_y: float = 0.0) -> None:
         """
@@ -99,30 +99,30 @@ class SimWorld:
             robots[i] = Robot(id=i, turn_on=False, is_yellow=is_yellow, x=pos_x, y=pos_y)
         return robots
 
-    def _to_grsim_replacement(self) -> grSim_Replacement:
-        replacement = grSim_Replacement()
-        for robot in self._blue_robots.values():
-            replacement.robots.extend([self._to_grsim_replacement_robot(robot)])
-        for robot in self._yellow_robots.values():
-            replacement.robots.extend([self._to_grsim_replacement_robot(robot)])
+    def _to_sim_control(self) -> SimulatorControl:
+        control = SimulatorControl()
         for ball in self._ball:
-            replacement.ball.CopyFrom(self._to_grsim_replacement_ball(ball))
-        return replacement
+            control.teleport_ball.CopyFrom(self._to_sim_teleport_ball(ball))
+        for robot in self._blue_robots.values():
+            control.teleport_robot.extend([self._to_sim_teleport_robot(robot)])
+        for robot in self._yellow_robots.values():
+            control.teleport_robot.extend([self._to_sim_teleport_robot(robot)])
+        return control
 
-    def _to_grsim_replacement_ball(self, ball: Ball) -> grSim_BallReplacement:
-        ball_replacement = grSim_BallReplacement()
-        ball_replacement.x = ball.x
-        ball_replacement.y = ball.y
-        ball_replacement.vx = ball.v_x
-        ball_replacement.vy = ball.v_y
-        return ball_replacement
+    def _to_sim_teleport_ball(self, ball: Ball) -> TeleportBall:
+        ball_teleport = TeleportBall()
+        ball_teleport.x = ball.x
+        ball_teleport.y = ball.y
+        ball_teleport.vx = ball.v_x
+        ball_teleport.vy = ball.v_y
+        return ball_teleport
 
-    def _to_grsim_replacement_robot(self, robot: Robot) -> grSim_RobotReplacement:
-        robot_replacement = grSim_RobotReplacement()
-        robot_replacement.x = robot.x
-        robot_replacement.y = robot.y
-        robot_replacement.dir = math.degrees(robot.orientation)
-        robot_replacement.id = robot.id
-        robot_replacement.yellowteam = robot.is_yellow
-        robot_replacement.turnon = robot.turn_on
-        return robot_replacement
+    def _to_sim_teleport_robot(self, robot: Robot) -> TeleportRobot:
+        robot_teleport = TeleportRobot()
+        robot_teleport.id.id = robot.id
+        robot_teleport.id.team = Team.BLUE if not robot.is_yellow else Team.YELLOW
+        robot_teleport.x = robot.x
+        robot_teleport.y = robot.y
+        robot_teleport.orientation = robot.orientation
+        robot_teleport.present = robot.turn_on
+        return robot_teleport
