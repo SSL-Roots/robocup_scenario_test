@@ -48,7 +48,7 @@ def test_our_kickoff(rcst_comm):
     assert rcst_comm.observer.ball_has_been_in_positive_goal() is True
 ```
 
-More examples are in [examples](examples).
+More examples are in [tests](tests).
 
 ## Linting
 
