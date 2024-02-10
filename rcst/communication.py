@@ -63,6 +63,10 @@ class Communication:
         self.referee.set_command(command)
         time.sleep(sleep_time)
 
+    def set_ball_placement_position(self, x: float, y: float):
+        print("Set ball placement position to ({}, {}).".format(x, y))
+        self.referee.set_designated_position(x, y)
+
     def send_empty_world(self, sleep_time: float = 0.1):
         print("Send empty world.")
         world = SimWorld.make_empty_world()
