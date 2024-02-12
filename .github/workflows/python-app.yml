@@ -63,7 +63,7 @@ jobs:
         echo "game.py started!"
 
     - name: Run scenario tests
-      run: pytest tests/test_scenario_kickoff.py --vision_port=10020 --cov=rcst --cov-report=xml --cov-append
+      run: pytest tests/test_scenario_*.py --vision_port=10020 --cov=rcst --cov-report=xml --cov-append
 
     - name: Get and print logs
       if: always()
