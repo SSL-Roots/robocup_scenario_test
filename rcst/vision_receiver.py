@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import socket
+import struct
 
 
 class VisionReceiver:
@@ -20,6 +21,10 @@ class VisionReceiver:
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.sock.bind((addr, port))
+
+        # Join the multicast group
+        mreq = struct.pack("4sl", socket.inet_aton(addr), socket.INADDR_ANY)
+        self.sock.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
 
         self.sock.settimeout(1.0)
 

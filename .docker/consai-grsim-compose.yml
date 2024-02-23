@@ -1,15 +1,18 @@
 version: '3.8'
 services:
   grsim:
-    image: robocupssl/grsim
+    image: ghcr.io/ssl-roots/docker_images/grsim:main
+    container_name: grsim
     network_mode: host
-    command: []
+    command: |
+      ./grSim --headless -platform offscreen
     tty: true
     stdin_open: true
     restart: "no"
 
   consai_ros2:
     image: ghcr.io/ssl-roots/consai_ros2@sha256:93c2db26b68e69fd43cd401b1f54da388b3d31b460d76bff76760fa251bd7aa7
+    container_name: consai
     network_mode: host
     command: |
       ros2 launch consai_examples start.launch.py game:=true invert:=false vision_port:=10020 gui:=false

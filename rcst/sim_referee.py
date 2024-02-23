@@ -23,6 +23,8 @@ class SimReferee:
         self._command = Referee.HALT
         self._command_counter = 0
         self._command_timestamp = self._get_time_stamp_us()
+        self._designated_position_x = 0.0
+        self._designated_position_y = 0.0
 
     def set_command(self, command: str) -> bool:
         if not hasattr(Referee, command):
@@ -31,6 +33,10 @@ class SimReferee:
         self._command = getattr(Referee, command)
         self._command_counter += 1
         self._command_timestamp = self._get_time_stamp_us()
+
+    def set_designated_position(self, x: float, y: float) -> None:
+        self._designated_position_x = x
+        self._designated_position_y = y
 
     def to_referee_packet_string(self) -> bytes:
         packet = Referee()
@@ -41,6 +47,10 @@ class SimReferee:
         packet.command_timestamp = self._command_timestamp
         packet.yellow.CopyFrom(self._make_team_info("Yellow"))
         packet.blue.CopyFrom(self._make_team_info("Blue"))
+        # Convert meters to millimeters.
+        packet.designated_position.x = self._designated_position_x * 1000
+        packet.designated_position.y = self._designated_position_y * 1000
+
         return packet.SerializeToString()
 
     def _get_time_stamp_us(self) -> int:

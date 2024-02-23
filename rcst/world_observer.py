@@ -29,6 +29,8 @@ class WorldObserver:
         self._goal_half_width = goal_width / 2.0
         self._goal_depth = goal_depth
 
+        self._vision_world = VisionWorld()
+
         self._ball_has_been_in_positive_goal = False
         self._ball_has_been_in_negative_goal = False
 
@@ -43,12 +45,16 @@ class WorldObserver:
         return self._ball_has_been_in_negative_goal
 
     def update(self, vision_world: VisionWorld) -> None:
-        ball = vision_world.get_ball()
+        self._vision_world = vision_world
+        ball = self._vision_world.get_ball()
         if not self._ball_has_been_in_positive_goal:
             self._ball_has_been_in_positive_goal = self._ball_in_positive_goal(ball)
 
         if not self._ball_has_been_in_negative_goal:
             self._ball_has_been_in_negative_goal = self._ball_in_negative_goal(ball)
+
+    def get_world(self) -> VisionWorld:
+        return self._vision_world
 
     def _ball_in_positive_goal(self, ball: Ball) -> bool:
         in_goal_depth = ball.x > self._field_half_length \
