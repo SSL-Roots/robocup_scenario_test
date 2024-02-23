@@ -18,15 +18,15 @@ import time
 
 def test_our_ball_placement(rcst_comm):
     rcst_comm.send_empty_world()
-    rcst_comm.send_ball(-4, -4)
+    rcst_comm.send_ball(0, 0)
     rcst_comm.send_blue_robot(1, -0.5, 0.0, 0.0)
     rcst_comm.send_blue_robot(2, -1.0, 0.0, 0.0)
     rcst_comm.send_blue_robot(3, -1.5, 0.0, 0.0)
     rcst_comm.send_blue_robot(4, -2.0, 0.0, 0.0)
     time.sleep(1)  # Wait for the robots to be placed.
 
-    target_x = 4.0
-    target_y = 4.0
+    target_x = 1.0
+    target_y = 1.0
 
     rcst_comm.observer.reset()
     rcst_comm.change_referee_command('STOP', 3.0)
