@@ -20,7 +20,7 @@ setup(
     long_description=open('README.md').read(),
     install_requires=[
         "protobuf <= 3.20",
-        "typing_extensions= >= 4.9.0",
+        "typing_extensions >= 4.9.0",
     ],
     extras_require={
         'dev': [
