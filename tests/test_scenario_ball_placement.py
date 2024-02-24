@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import rcst.calc as calc
 import time
 
 
@@ -28,12 +27,18 @@ def test_our_ball_placement(rcst_comm):
     target_x = 1.0
     target_y = 1.0
 
-    rcst_comm.observer.reset()
+    rcst_comm.observer.ball_placement().set_targets(
+        target_x, target_y, for_blue_team=True)
+
     rcst_comm.change_referee_command('STOP', 3.0)
 
     rcst_comm.set_ball_placement_position(target_x, target_y)
     rcst_comm.change_referee_command('BALL_PLACEMENT_BLUE', 0.0)
 
-    time.sleep(30)
-    ball = rcst_comm.observer.get_world().get_ball()
-    assert calc.distance(ball.x, ball.y, target_x, target_y) < 0.15
+    placement_success = False
+    for _ in range(30):
+        if rcst_comm.observer.ball_placement().success():
+            placement_success = True
+            break
+        time.sleep(1)
+    assert placement_success is True

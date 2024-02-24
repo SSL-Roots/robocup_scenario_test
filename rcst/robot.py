@@ -13,6 +13,9 @@
 # limitations under the License.
 
 from typing import List
+from typing import TypeAlias
+
+RobotDict: TypeAlias = dict[int, 'Robot']
 
 
 class Robot:

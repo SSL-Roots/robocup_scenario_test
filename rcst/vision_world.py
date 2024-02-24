@@ -13,21 +13,22 @@
 # limitations under the License.
 
 from typing import List
-from typing import Dict
 
 from .ball import Ball
 from .robot import Robot
+from .robot import RobotDict
 
-from .proto.ssl_vision_wrapper_pb2 import SSL_WrapperPacket
-from .proto.ssl_vision_detection_pb2 import SSL_DetectionFrame
 from .proto.ssl_vision_detection_pb2 import SSL_DetectionBall
+from .proto.ssl_vision_detection_pb2 import SSL_DetectionFrame
+from .proto.ssl_vision_detection_pb2 import SSL_DetectionRobot
+from .proto.ssl_vision_wrapper_pb2 import SSL_WrapperPacket
 
 
 class VisionWorld:
     def __init__(self):
         self._ball: List[Ball] = [Ball()]
-        self._blue_robots: Dict[int, Robot] = {}
-        self._yellow_robots: Dict[int, Robot] = {}
+        self._blue_robots: RobotDict = {}
+        self._yellow_robots: RobotDict = {}
 
     def update_with_vision_packet(self, data: bytes) -> None:
         packet = SSL_WrapperPacket()
@@ -43,11 +44,36 @@ class VisionWorld:
     def get_ball(self) -> Ball:
         return self._ball[0]
 
+    def get_blue_robots(self) -> RobotDict:
+        return self._blue_robots
+
+    def get_yellow_robots(self) -> RobotDict:
+        return self._yellow_robots
+
     def _update_with_detection_frame(self, detection: SSL_DetectionFrame) -> None:
         for ball in detection.balls:
             self._update_ball(ball)
+
+        self._update_blue_robots(detection.robots_blue)
+        self._update_yellow_robots(detection.robots_yellow)
 
     def _update_ball(self, ball: SSL_DetectionBall) -> None:
         # Convert mm to m
         self._ball = [Ball(x=ball.x * 0.001,
                            y=ball.y * 0.001,)]
+
+    def _update_blue_robots(self, robots: List[SSL_DetectionRobot]) -> None:
+        for robot in robots:
+            self._blue_robots[robot.robot_id] = Robot(x=robot.x * 0.001,
+                                                      y=robot.y * 0.001,
+                                                      orientation=robot.orientation,
+                                                      id=robot.robot_id,
+                                                      is_yellow=False)
+
+    def _update_yellow_robots(self, robots: List[SSL_DetectionRobot]) -> None:
+        for robot in robots:
+            self._yellow_robots[robot.robot_id] = Robot(x=robot.x * 0.001,
+                                                        y=robot.y * 0.001,
+                                                        orientation=robot.orientation,
+                                                        id=robot.robot_id,
+                                                        is_yellow=True)

@@ -13,10 +13,10 @@
 # limitations under the License.
 
 from typing import List
-from typing import Dict
 
 from .ball import Ball
 from .robot import Robot
+from .robot import RobotDict
 
 from .proto.ssl_simulation_control_pb2 import SimulatorCommand
 from .proto.ssl_simulation_control_pb2 import SimulatorControl
@@ -30,8 +30,8 @@ class SimWorld:
 
     def __init__(self, field_length: float = 12.0, field_width: float = 9.0):
         self._ball: List[Ball] = []
-        self._blue_robots: Dict[int, Robot] = {}
-        self._yellow_robots: Dict[int, Robot] = {}
+        self._blue_robots: RobotDict = {}
+        self._yellow_robots: RobotDict = {}
         self._field_length = field_length
         self._field_width = field_width
 
@@ -91,7 +91,7 @@ class SimWorld:
         else:
             self._blue_robots[robot_id] = robot
 
-    def _all_robots_turn_off(self, is_yellow, x, y, offset_x, offset_y) -> Dict[int, Robot]:
+    def _all_robots_turn_off(self, is_yellow, x, y, offset_x, offset_y) -> RobotDict:
         robots = {}
         for i in range(self.MAX_ROBOT_NUM):
             pos_x = x + i * offset_x

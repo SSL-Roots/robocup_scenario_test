@@ -12,8 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .vision_world import VisionWorld
+from .observer.ball_placement_observer import BallPlacementObserver
 from .observer.goal_observer import GoalObserver
+from .vision_world import VisionWorld
 
 from typing_extensions import deprecated
 
@@ -33,16 +34,25 @@ class WorldObserver:
 
         self._vision_world = VisionWorld()
 
+        self._ball_placement_observer = BallPlacementObserver()
         self._goal_observer = GoalObserver(
             self._field_half_length, self._goal_half_width, self._goal_depth)
 
     def update(self, vision_world: VisionWorld) -> None:
         self._vision_world = vision_world
         ball = self._vision_world.get_ball()
+        blue_robots = self._vision_world.get_blue_robots()
+        yellow_robots = self._vision_world.get_yellow_robots()
+
+        self._ball_placement_observer.update(ball, blue_robots, yellow_robots)
         self._goal_observer.update(ball)
 
     def reset(self) -> None:
+        self._ball_placement_observer.reset()
         self._goal_observer.reset()
+
+    def ball_placement(self) -> BallPlacementObserver:
+        return self._ball_placement_observer
 
     def goal(self) -> GoalObserver:
         return self._goal_observer
