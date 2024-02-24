@@ -44,7 +44,9 @@ jobs:
         flake8 .
 
     - name: Run unit tests
-      run: pytest tests/test_world_observer.py --cov=rcst --cov-report=xml --cov-append
+      run: |
+        pytest tests/test_world_observer.py --cov=rcst --cov-report=xml --cov-append
+        pytest tests/test_goal_observer.py --cov=rcst --cov-report=xml --cov-append
 
     - name: Start Docker Compose services
       run: docker compose -f .docker/consai-grsim-compose.yml up -d
