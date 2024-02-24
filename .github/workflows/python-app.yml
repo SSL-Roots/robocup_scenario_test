@@ -45,8 +45,8 @@ jobs:
 
     - name: Run unit tests
       run: |
-        pytest tests/test_world_observer.py --cov=rcst --cov-report=xml --cov-append
-        pytest tests/test_goal_observer.py --cov=rcst --cov-report=xml --cov-append
+        coverage run --source=rcst -m pytest tests/test_world_observer.py
+        coverage run --source=rcst -m pytest tests/test_goal_observer.py --append
 
     - name: Start Docker Compose services
       run: docker compose -f .docker/consai-grsim-compose.yml up -d
@@ -65,7 +65,7 @@ jobs:
         echo "game.py started!"
 
     - name: Run scenario tests
-      run: pytest tests/test_scenario_*.py --vision_port=10020 --cov=rcst --cov-report=xml --cov-append
+      run: coverage run --source=rcst -m pytest tests/test_scenario_*.py --vision_port=10020 --append
 
     - name: Get and print logs
       if: always()
@@ -74,6 +74,9 @@ jobs:
     - name: Clean up Docker Compose services
       if: always()
       run: docker compose -f .docker/consai-grsim-compose.yml down
+
+    - name: Generate coverage report
+      run: coverage xml
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
