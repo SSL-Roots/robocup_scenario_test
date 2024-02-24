@@ -43,7 +43,7 @@ class BallPlacementObserver:
         if not self._no_robots_are_nearby(yellow_robots, yellow_distance):
             self._success = False
             return
-        
+
         self._success = True
 
     def reset(self) -> None:
