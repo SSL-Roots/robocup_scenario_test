@@ -46,7 +46,7 @@ jobs:
     - name: Run unit tests
       run: |
         coverage run --source=rcst -m pytest tests/test_world_observer.py
-        coverage run --source=rcst --apend -m pytest tests/test_goal_observer.py
+        coverage run --source=rcst --append -m pytest tests/test_goal_observer.py
 
     - name: Start Docker Compose services
       run: docker compose -f .docker/consai-grsim-compose.yml up -d
