@@ -27,3 +27,24 @@ def test_goal_instance():
     observer.update(vision_world)
 
     assert observer.goal().ball_has_been_in_positive_goal() is True
+
+    observer.reset()
+    assert observer.goal().ball_has_been_in_positive_goal() is False
+
+
+def test_ball_placement():
+    # Note: The ball placement observer's tests are already covered in
+    # the test_ball_placement_observer.py file.
+    observer = WorldObserver(
+        field_length=12.0, field_width=9.0, goal_width=1.8, goal_depth=0.18)
+
+    vision_world = VisionWorld()
+    vision_world._ball = [Ball(x=1.0, y=2.0)]
+
+    observer.ball_placement().set_targets(1.0, 2.0, for_blue_team=True)
+
+    observer.update(vision_world)
+    assert observer.ball_placement().success() is True
+
+    observer.reset()
+    assert observer.ball_placement().success() is False
