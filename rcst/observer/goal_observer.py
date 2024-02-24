@@ -56,4 +56,3 @@ class GoalObserver:
                         and ball.x > -self._field_half_length - self._goal_depth
         in_goal_width = abs(ball.y) < self._goal_half_width
         return in_goal_depth and in_goal_width
-
