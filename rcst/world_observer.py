@@ -12,8 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .ball import Ball
 from .vision_world import VisionWorld
+from .observer.goal_observer import GoalObserver
+
+from typing_extensions import deprecated
 
 
 class WorldObserver:
@@ -31,39 +33,27 @@ class WorldObserver:
 
         self._vision_world = VisionWorld()
 
-        self._ball_has_been_in_positive_goal = False
-        self._ball_has_been_in_negative_goal = False
-
-    def reset(self) -> None:
-        self._ball_has_been_in_positive_goal = False
-        self._ball_has_been_in_negative_goal = False
-
-    def ball_has_been_in_positive_goal(self) -> bool:
-        return self._ball_has_been_in_positive_goal
-
-    def ball_has_been_in_negative_goal(self) -> bool:
-        return self._ball_has_been_in_negative_goal
+        self._goal_observer = GoalObserver(
+            self._field_half_length, self._goal_half_width, self._goal_depth)
 
     def update(self, vision_world: VisionWorld) -> None:
         self._vision_world = vision_world
         ball = self._vision_world.get_ball()
-        if not self._ball_has_been_in_positive_goal:
-            self._ball_has_been_in_positive_goal = self._ball_in_positive_goal(ball)
+        self._goal_observer.update(ball)
 
-        if not self._ball_has_been_in_negative_goal:
-            self._ball_has_been_in_negative_goal = self._ball_in_negative_goal(ball)
+    def reset(self) -> None:
+        self._goal_observer.reset()
+
+    def goal(self) -> GoalObserver:
+        return self._goal_observer
+
+    @deprecated('ball_has_been_in_positive_goal() is moved to goal(). Use goal() instead.')
+    def ball_has_been_in_positive_goal(self) -> bool:
+        return self._goal_observer.ball_has_been_in_positive_goal()
+
+    @deprecated('ball_has_been_in_negative_goal() is moved to goal(). Use goal() instead.')
+    def ball_has_been_in_negative_goal(self) -> bool:
+        return self._goal_observer.ball_has_been_in_negative_goal()
 
     def get_world(self) -> VisionWorld:
         return self._vision_world
-
-    def _ball_in_positive_goal(self, ball: Ball) -> bool:
-        in_goal_depth = ball.x > self._field_half_length \
-                        and ball.x < self._field_half_length + self._goal_depth
-        in_goal_width = abs(ball.y) < self._goal_half_width
-        return in_goal_depth and in_goal_width
-
-    def _ball_in_negative_goal(self, ball: Ball) -> bool:
-        in_goal_depth = ball.x < -self._field_half_length \
-                        and ball.x > -self._field_half_length - self._goal_depth
-        in_goal_width = abs(ball.y) < self._goal_half_width
-        return in_goal_depth and in_goal_width
