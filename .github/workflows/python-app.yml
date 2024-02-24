@@ -45,6 +45,7 @@ jobs:
 
     - name: Run unit tests
       run: |
+        COV_CORE_SOURCE=rcst COV_CORE_CONFIG=.coveragerc COV_CORE_DATAFILE=.coverage.eager
         pytest tests/test_world_observer.py --cov=rcst --cov-report=xml --cov-append
         pytest tests/test_goal_observer.py --cov=rcst --cov-report=xml --cov-append
 
@@ -65,7 +66,9 @@ jobs:
         echo "game.py started!"
 
     - name: Run scenario tests
-      run: pytest tests/test_scenario_*.py --vision_port=10020 --cov=rcst --cov-report=xml --cov-append
+      run: |
+        COV_CORE_SOURCE=rcst COV_CORE_CONFIG=.coveragerc COV_CORE_DATAFILE=.coverage.eager
+        pytest tests/test_scenario_*.py --vision_port=10020 --cov=rcst --cov-report=xml --cov-append
 
     - name: Get and print logs
       if: always()
