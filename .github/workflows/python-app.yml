@@ -99,6 +99,7 @@ jobs:
     - name: Get Artifact URL
       id: get-artifact-url
       uses: actions/github-script@v6
+      if: always()
       with:
         script: |
           const github = require('@actions/github');
@@ -118,6 +119,7 @@ jobs:
 
     - name: Post Artifact URL as PR Comment
       uses: actions/github-script@v6
+      if: always()
       with:
         script: |
           const github = require('@actions/github');
