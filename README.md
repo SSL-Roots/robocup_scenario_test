@@ -63,7 +63,7 @@ You can record logs on the GitHub Actions like this:
     chmod +x ssl-log-recorder
 
 - name: Run scenario tests
-  run: coverage run --source=rcst --append -m pytest tests/test_scenario_*.py --vision_port=10020 --logging --log_recorder=./ssl-log-recorder
+  run: pytest tests/test_scenario_*.py --vision_port=10020 --logging --log_recorder=./ssl-log-recorder
 ```
 
 When a test fails, the library saves the log file as `TEST_NAME.log.gz` in the current directory.
