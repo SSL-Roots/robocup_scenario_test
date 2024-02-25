@@ -15,6 +15,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write  # For uploading PR comments
 
 jobs:
   build:
@@ -65,8 +66,13 @@ jobs:
 
         echo "game.py started!"
 
+    - name: Download logger
+      run: |
+        curl -L https://github.com/RoboCup-SSL/ssl-go-tools/releases/download/v1.5.2/ssl-log-recorder_v1.5.2_linux_amd64 -o ssl-log-recorder
+        chmod +x ssl-log-recorder
+
     - name: Run scenario tests
-      run: coverage run --source=rcst --append -m pytest tests/test_scenario_*.py --vision_port=10020
+      run: coverage run --source=rcst --append -m pytest tests/test_scenario_*.py --vision_port=10020 --logging --log_recorder=./ssl-log-recorder
 
     - name: Get and print logs
       if: always()
@@ -83,3 +89,31 @@ jobs:
       uses: codecov/codecov-action@v3
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+    - name: Upload artifacts
+      id: upload-artifact
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: failure-logs
+        path: '*.log.gz'
+
+    - name: Check if Artifact was uploaded
+      id: check-artifact
+      if: always()
+      run: |
+        if [ -z "${{ steps.upload-artifact.outputs.artifact-url }}" ]; then
+          echo "Artifact URL not found, skipping comment."
+          echo "skip_comment=true" >> $GITHUB_OUTPUT
+        else
+          echo "Artifact URL found."
+          echo "skip_comment=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Comment PR with Artifact URL
+      if: steps.check-artifact.outputs.skip_comment != 'true'
+      uses: peter-evans/create-or-update-comment@v4
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        body: |
+          Failure logs: ${{ steps.upload-artifact.outputs.artifact-url }}

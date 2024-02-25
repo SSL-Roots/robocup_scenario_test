@@ -161,3 +161,4 @@ cython_debug/
 
 *_pb2.py
 .vscode
+*.log.gz
