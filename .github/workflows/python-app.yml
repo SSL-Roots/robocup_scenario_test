@@ -98,8 +98,20 @@ jobs:
         name: failure-logs
         path: '*.log.gz'
 
-    - name: Comment PR with Artifact URL
+    - name: Check if Artifact was uploaded
+      id: check-artifact
       if: always()
+      run: |
+        if [ -z "${{ steps.upload-artifact.outputs.artifact-url }}" ]; then
+          echo "Artifact URL not found, skipping comment."
+          echo "::set-output name=skip_comment::true"
+        else
+          echo "Artifact URL found."
+          echo "::set-output name=skip_comment::false"
+        fi
+
+    - name: Comment PR with Artifact URL
+      if: steps.check-artifact.outputs.skip_comment != 'true'
       uses: peter-evans/create-or-update-comment@v4
       with:
         issue-number: ${{ github.event.pull_request.number }}
