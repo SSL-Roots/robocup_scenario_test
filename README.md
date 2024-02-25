@@ -68,7 +68,7 @@ You can record logs on the GitHub Actions like this:
 
 When a test fails, the library saves the log file as `TEST_NAME.log.gz` in the current directory.
 
-
+Please see GitHub workflow examples in [`.github/workflows`](.github/workflows).
 
 ## Linting
 
