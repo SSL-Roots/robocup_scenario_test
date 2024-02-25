@@ -16,6 +16,20 @@ import pytest
 from rcst.communication import Communication
 
 
+# This hook makes rep_ attributes available in the test fixtures.
+# Ref: https://github.com/pytest-dev/pytest/discussions/10255
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item):
+    outcome = yield
+    rep = outcome.get_result()
+
+    rep.xfailed = False
+    if hasattr(rep, "wasxfail"):
+        if rep.passed:
+            rep.xfailed = True    # unexpected pass
+    setattr(item, "rep_" + rep.when, rep)
+
+
 def pytest_addoption(parser):
     parser.addoption("--vision_addr", action="store", default="224.5.23.2",
                      help="Vision multicast address")
@@ -44,7 +58,7 @@ def rcst_config(request):
 
 
 @pytest.fixture
-def rcst_comm(rcst_config):
+def rcst_comm(rcst_config, request):
     comm_instance = Communication(
         vision_addr=rcst_config["vision_addr"],
         vision_port=rcst_config["vision_port"],
@@ -60,3 +74,7 @@ def rcst_comm(rcst_config):
 
     comm_instance.change_referee_command('HALT', 0.1)
     comm_instance.stop_thread()
+
+    # If the test failed, print the test name.
+    if request.node.rep_call.failed:
+        print("Test failed. test name: {}".format(request.node.name))
