@@ -15,6 +15,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: write  # For uploading PR comments
 
 jobs:
   build:

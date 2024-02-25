@@ -50,6 +50,26 @@ def test_our_kickoff(rcst_comm):
 
 More examples are in [tests](tests).
 
+### Logging
+
+This library supports the `ssl-log-recorder` of [ssl-go-tools](https://github.com/RoboCup-SSL/ssl-go-tools/tree/master).
+
+You can record logs on the GitHub Actions like this:
+
+```yaml
+- name: Download logger
+  run: |
+    curl -L https://github.com/RoboCup-SSL/ssl-go-tools/releases/download/v1.5.2/ssl-log-recorder_v1.5.2_linux_amd64 -o ssl-log-recorder
+    chmod +x ssl-log-recorder
+
+- name: Run scenario tests
+  run: coverage run --source=rcst --append -m pytest tests/test_scenario_*.py --vision_port=10020 --logging --log_recorder=./ssl-log-recorder
+```
+
+When a test fails, the library saves the log file as `TEST_NAME.log.gz` in the current directory.
+
+
+
 ## Linting
 
 This project uses [flake8](https://flake8.pycqa.org/en/latest/) for linting.
