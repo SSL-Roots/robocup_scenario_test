@@ -104,10 +104,10 @@ jobs:
       run: |
         if [ -z "${{ steps.upload-artifact.outputs.artifact-url }}" ]; then
           echo "Artifact URL not found, skipping comment."
-          echo "::set-output name=skip_comment::true"
+          echo "skip_comment=true" >> $GITHUB_OUTPUT
         else
           echo "Artifact URL found."
-          echo "::set-output name=skip_comment::false"
+          echo "skip_comment=false" >> $GITHUB_OUTPUT
         fi
 
     - name: Comment PR with Artifact URL
