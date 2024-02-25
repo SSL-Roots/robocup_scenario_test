@@ -14,6 +14,7 @@
 
 import pytest
 from rcst.communication import Communication
+from rcst.logging import Recorder
 
 
 # This hook makes rep_ attributes available in the test fixtures.
@@ -43,6 +44,10 @@ def pytest_addoption(parser):
                      help="Simulator address")
     parser.addoption("--sim_port", action="store", default="10300",
                      help="Simulator port")
+    parser.addoption("--logging", action="store_true", default=False,
+                     help="Enable logging")
+    parser.addoption("--log_recorder", action="store", default="./ssl-log-recorder",
+                     help="Path to the log recorder command")
 
 
 @pytest.fixture
@@ -53,7 +58,9 @@ def rcst_config(request):
         "referee_addr": request.config.getoption("--referee_addr"),
         "referee_port": int(request.config.getoption("--referee_port")),
         "sim_addr": request.config.getoption("--sim_addr"),
-        "sim_port": int(request.config.getoption("--sim_port"))
+        "sim_port": int(request.config.getoption("--sim_port")),
+        "logging": request.config.getoption("--logging"),
+        "log_recorder": request.config.getoption("--log_recorder")
     }
 
 
@@ -67,6 +74,11 @@ def rcst_comm(rcst_config, request):
         sim_addr=rcst_config["sim_addr"],
         sim_port=rcst_config["sim_port"]
     )
+    # Start recording of vision and referee packets.
+    recorder = Recorder(rcst_config["log_recorder"])
+    if rcst_config["logging"]:
+        recorder.start()
+
     comm_instance.start_thread()
     comm_instance.change_referee_command('HALT', 0.1)
 
@@ -75,6 +87,4 @@ def rcst_comm(rcst_config, request):
     comm_instance.change_referee_command('HALT', 0.1)
     comm_instance.stop_thread()
 
-    # If the test failed, print the test name.
-    if request.node.rep_call.failed:
-        print("Test failed. test name: {}".format(request.node.name))
+    recorder.stop(request.node.name, save=request.node.rep_call.failed)
