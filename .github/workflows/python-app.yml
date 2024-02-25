@@ -92,5 +92,5 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: failure_logs
-        path: *.log.gz
+        name: failure-logs
+        path: '*.log.gz'
