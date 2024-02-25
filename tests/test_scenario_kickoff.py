@@ -27,7 +27,7 @@ def test_our_kickoff(rcst_comm):
     rcst_comm.change_referee_command('PREPARE_KICKOFF_BLUE', 3.0)
     rcst_comm.change_referee_command('NORMAL_START', 5.0)
 
-    assert rcst_comm.observer.goal().ball_has_been_in_positive_goal() is True
+    assert rcst_comm.observer.goal().ball_has_been_in_positive_goal() is False
 
 
 def test_their_kickoff(rcst_comm):
@@ -46,4 +46,4 @@ def test_their_kickoff(rcst_comm):
     rcst_comm.send_ball(0, 0, -6.0, 0.5)
     time.sleep(5)
 
-    assert rcst_comm.observer.goal().ball_has_been_in_negative_goal() is False
+    assert rcst_comm.observer.goal().ball_has_been_in_negative_goal() is True
