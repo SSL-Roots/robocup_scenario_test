@@ -77,7 +77,7 @@ def rcst_comm(rcst_config, request):
     # Start recording of vision and referee packets.
     recorder = Recorder(rcst_config["log_recorder"])
     if rcst_config["logging"]:
-        recorder.start()
+        recorder.start(rcst_config["vision_addr"], rcst_config["vision_port"])
 
     comm_instance.start_thread()
     comm_instance.change_referee_command('HALT', 0.1)

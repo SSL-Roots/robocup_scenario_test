@@ -35,11 +35,11 @@ class Recorder:
         except FileNotFoundError:
             return False
 
-    def start(self):
+    def start(self, vision_addr: str = "224.5.23.2", vision_port: int = 10006):
         # Start the recording in a separate thread.
         def _recording():
             self._process = subprocess.Popen(
-                [self._command_name],
+                [self._command_name, "-vision-address", vision_addr + ":" + str(vision_port)],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 preexec_fn=lambda: signal.signal(signal.SIGINT, signal.SIG_IGN)
@@ -49,6 +49,8 @@ class Recorder:
         if not self.check_command_available():
             print(f"Command '{self._command_name}' is not available.")
             return
+
+        print("Started recording.")
 
         self._thread = threading.Thread(target=_recording)
         self._thread.start()
@@ -63,6 +65,7 @@ class Recorder:
             # If the file name is empty, use the default name.
             if not file_name.strip():
                 file_name = "recording"
+            file_name += ".log.gz"
 
             self._rename_latest_log_file(file_name)
             if not save:
@@ -71,7 +74,6 @@ class Recorder:
     def _rename_latest_log_file(self, new_file_name: str):
         # Find the latest log file and rename it.
         # Note: This method finds the latest log file in the current directory.
-        new_file_name += ".log.gz"
         list_of_files = glob.glob('*.log.gz')
         if not list_of_files:
             print("log file not found.")
