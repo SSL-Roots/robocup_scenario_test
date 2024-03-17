@@ -13,7 +13,17 @@
 # limitations under the License.
 
 import math
+from .robot import Robot
 
 
 def distance(x1: float, y1: float, x2: float, y2: float) -> float:
     return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+
+
+def velocity_norm(present: Robot, previous: Robot, dt: float) -> float:
+    if dt == 0:
+        raise ValueError("dt cannot be zero")
+
+    vx = (present.x - previous.x) / dt
+    vy = (present.y - previous.y) / dt
+    return math.sqrt(vx**2 + vy**2)
