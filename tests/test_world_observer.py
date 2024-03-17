@@ -13,8 +13,11 @@
 # limitations under the License.
 
 from rcst.ball import Ball
+from rcst.robot import Robot
 from rcst.vision_world import VisionWorld
 from rcst.world_observer import WorldObserver
+
+import time
 
 
 def test_goal_instance():
@@ -48,3 +51,26 @@ def test_ball_placement():
 
     observer.reset()
     assert observer.ball_placement().success() is False
+
+
+def test_robot_speed():
+    # Note: The robot speed observer's tests are already covered in
+    # the test_robot_speed_observer.py file.
+    observer = WorldObserver(
+        field_length=12.0, field_width=9.0, goal_width=1.8, goal_depth=0.18)
+
+    vision_world = VisionWorld()
+    vision_world._blue_robots[0] = Robot(x=0.0, y=0.0, id=0)
+    vision_world._yellow_robots[0] = Robot(x=0.0, y=0.0, id=0)
+    observer.update(vision_world)
+
+    time.sleep(1)  # This makes dt = 1.0
+    vision_world._blue_robots[0] = Robot(x=1.0, y=0.0, id=0)
+    vision_world._yellow_robots[0] = Robot(x=1.0, y=0.0, id=0)
+    observer.update(vision_world)
+    assert observer.robot_speed().some_blue_robots_over(0.1) is True
+    assert observer.robot_speed().some_yellow_robots_over(0.1) is True
+
+    observer.reset()
+    assert observer.robot_speed().some_blue_robots_over(0.1) is False
+    assert observer.robot_speed().some_yellow_robots_over(0.1) is False

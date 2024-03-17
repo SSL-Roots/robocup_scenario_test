@@ -14,6 +14,7 @@
 
 from .observer.ball_placement_observer import BallPlacementObserver
 from .observer.goal_observer import GoalObserver
+from .observer.robot_speed import RobotSpeedObserver
 from .vision_world import VisionWorld
 
 from typing_extensions import deprecated
@@ -37,6 +38,7 @@ class WorldObserver:
         self._ball_placement_observer = BallPlacementObserver()
         self._goal_observer = GoalObserver(
             self._field_half_length, self._goal_half_width, self._goal_depth)
+        self._robot_speed_observer = RobotSpeedObserver()
 
     def update(self, vision_world: VisionWorld) -> None:
         self._vision_world = vision_world
@@ -46,16 +48,21 @@ class WorldObserver:
 
         self._ball_placement_observer.update(ball, blue_robots, yellow_robots)
         self._goal_observer.update(ball)
+        self._robot_speed_observer.update(blue_robots, yellow_robots)
 
     def reset(self) -> None:
         self._ball_placement_observer.reset()
         self._goal_observer.reset()
+        self._robot_speed_observer.reset()
 
     def ball_placement(self) -> BallPlacementObserver:
         return self._ball_placement_observer
 
     def goal(self) -> GoalObserver:
         return self._goal_observer
+
+    def robot_speed(self) -> RobotSpeedObserver:
+        return self._robot_speed_observer
 
     @deprecated('ball_has_been_in_positive_goal() is moved to goal(). Use goal() instead.')
     def ball_has_been_in_positive_goal(self) -> bool:
