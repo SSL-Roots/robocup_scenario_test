@@ -17,7 +17,6 @@ from rcst.robot import Robot
 from rcst.robot import RobotDict
 
 import pytest
-import time
 
 
 def test_blue_robots_over():

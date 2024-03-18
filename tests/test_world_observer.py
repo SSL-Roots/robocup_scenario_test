@@ -17,8 +17,6 @@ from rcst.robot import Robot
 from rcst.vision_world import VisionWorld
 from rcst.world_observer import WorldObserver
 
-import time
-
 
 def test_goal_instance():
     # Note: The goal observer's tests are already covered in the test_goal_observer.py file.
