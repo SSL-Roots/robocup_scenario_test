@@ -45,10 +45,11 @@ class WorldObserver:
         ball = self._vision_world.get_ball()
         blue_robots = self._vision_world.get_blue_robots()
         yellow_robots = self._vision_world.get_yellow_robots()
+        timestamp = self._vision_world.get_timestamp()
 
         self._ball_placement_observer.update(ball, blue_robots, yellow_robots)
         self._goal_observer.update(ball)
-        self._robot_speed_observer.update(blue_robots, yellow_robots)
+        self._robot_speed_observer.update(blue_robots, yellow_robots, timestamp)
 
     def reset(self) -> None:
         self._ball_placement_observer.reset()

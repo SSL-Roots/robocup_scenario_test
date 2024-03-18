@@ -29,6 +29,7 @@ class VisionWorld:
         self._ball: List[Ball] = [Ball()]
         self._blue_robots: RobotDict = {}
         self._yellow_robots: RobotDict = {}
+        self._timestamp: float = 0.0
 
     def update_with_vision_packet(self, data: bytes) -> None:
         packet = SSL_WrapperPacket()
@@ -50,12 +51,18 @@ class VisionWorld:
     def get_yellow_robots(self) -> RobotDict:
         return self._yellow_robots
 
+    def get_timestamp(self) -> float:
+        return self._timestamp
+
     def _update_with_detection_frame(self, detection: SSL_DetectionFrame) -> None:
         for ball in detection.balls:
             self._update_ball(ball)
 
         self._update_blue_robots(detection.robots_blue)
         self._update_yellow_robots(detection.robots_yellow)
+
+        if detection.t_capture > self._timestamp:
+            self._timestamp = detection.t_capture
 
     def _update_ball(self, ball: SSL_DetectionBall) -> None:
         # Convert mm to m

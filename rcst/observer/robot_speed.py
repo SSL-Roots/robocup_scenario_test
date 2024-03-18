@@ -13,7 +13,6 @@
 # limitations under the License.
 
 from copy import deepcopy
-from time import time
 
 from ..robot import RobotDict
 from .. import calc
@@ -29,13 +28,14 @@ class RobotSpeedObserver:
         self._blue_max_velocities: dict[int, float] = {}
         self._yellow_max_velocities: dict[int, float] = {}
 
-        self._prev_update_time = 0.0
+        self._prev_timestamp = -1.0
 
-    def update(self, blue_robots: RobotDict, yellow_robots: RobotDict) -> None:
-        # Ref: https://robocup-ssl.github.io/ssl-rules/sslrules.html#_ball_placement
+    def update(self, blue_robots: RobotDict, yellow_robots: RobotDict, timestamp: float) -> None:
+        if timestamp <= self._prev_timestamp:
+            return
 
-        dt = time() - self._prev_update_time
-        self._prev_update_time = time()
+        dt = timestamp - self._prev_timestamp
+        self._prev_timestamp = timestamp
 
         self._update_max_velocity(
             blue_robots, self._prev_blue_robots, self._blue_max_velocities, dt)
