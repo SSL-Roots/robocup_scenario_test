@@ -83,6 +83,9 @@ class RobotSpeedObserver:
     def some_yellow_robots_over(self, velocity: float) -> bool:
         return self._some_robots_over(self._yellow_max_velocities, velocity)
 
+    def _is_outlier(self, value: float, prev_value: float, threshold: float) -> bool:
+        return abs(value - prev_value) > threshold
+
     def _update_max_velocity(
             self, robots: RobotDict, prev_robots: RobotDict,
             max_velocities: dict[int, float], dt: float) -> None:
@@ -94,6 +97,10 @@ class RobotSpeedObserver:
             velocity = calc.velocity_norm(robot, prev_robots[robot.id], dt)
             if robot.id not in max_velocities.keys():
                 max_velocities[robot.id] = velocity
+                continue
+
+            # Remove outliers: acc > 0.5 m/s / frame
+            if self._is_outlier(velocity, max_velocities[robot.id], 0.5):
                 continue
 
             if velocity > max_velocities[robot.id]:
