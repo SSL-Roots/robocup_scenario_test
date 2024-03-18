@@ -17,7 +17,6 @@ from rcst.robot import Robot
 from rcst.robot import RobotDict
 
 import pytest
-import time
 
 
 def test_blue_robots_over():
@@ -29,12 +28,11 @@ def test_blue_robots_over():
 
     yellow_robots = RobotDict()
 
-    robot_speed.update(blue_robots, yellow_robots)
-    time.sleep(1)  # This makes dt = 1.0
+    robot_speed.update(blue_robots, yellow_robots, timestamp=0.0)
 
     blue_robots[0] = Robot(x=1.0, y=0.0, id=0)
     blue_robots[1] = Robot(x=0.0, y=2.0, id=1)
-    robot_speed.update(blue_robots, yellow_robots)
+    robot_speed.update(blue_robots, yellow_robots, timestamp=1.0)
 
     assert robot_speed.blue_max_velocities()[0] == pytest.approx(1.0, abs=0.01)
     assert robot_speed.blue_max_velocities()[1] == pytest.approx(2.0, abs=0.01)
@@ -64,13 +62,12 @@ def test_yelow_robots_over():
 
     blue_robots = RobotDict()
 
-    robot_speed.update(blue_robots, yellow_robots)
-    time.sleep(1)  # This makes dt = 1.0
+    robot_speed.update(blue_robots, yellow_robots, timestamp=0.0)
 
     # Robots are positioned at negative x and y
     yellow_robots[0] = Robot(x=-1.0, y=0.0, id=0)
     yellow_robots[1] = Robot(x=0.0, y=-2.0, id=1)
-    robot_speed.update(blue_robots, yellow_robots)
+    robot_speed.update(blue_robots, yellow_robots, timestamp=1.0)
 
     assert robot_speed.yellow_max_velocities()[0] == pytest.approx(1.0, abs=0.01)
     assert robot_speed.yellow_max_velocities()[1] == pytest.approx(2.0, abs=0.01)
