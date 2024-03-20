@@ -52,6 +52,7 @@ def blue_robot_did_not_avoid_ball(
 
 def test_avoid_ball(rcst_comm: Communication):
     rcst_comm.send_empty_world()
+    rcst_comm.send_ball(3, 0)
     for i in range(11):
         rcst_comm.send_blue_robot(i, -1.0, 3.0 - i * 0.5, math.radians(0))
     time.sleep(3)  # Wait for the robots to be placed.
@@ -61,7 +62,6 @@ def test_avoid_ball(rcst_comm: Communication):
 
     rcst_comm.change_referee_command('STOP', 1.0)
 
-    rcst_comm.send_ball(0, 0)
     success = True
     for _ in range(5):
         if rcst_comm.observer.customized().get_result("blue_robot_did_not_avoid_ball"):
