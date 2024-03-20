@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import pytest
+from rcst.ball import Ball
 import rcst.calc as calc
 from rcst.robot import Robot
 
@@ -20,6 +21,18 @@ from rcst.robot import Robot
 def test_distance():
     assert calc.distance(0, 0, 0, 0) == 0
     assert calc.distance(2, 3, -2, 3) == 4
+
+
+def test_distance_robot_and_ball():
+    robot = Robot(0, 0)
+    ball = Ball(0, 0)
+
+    assert calc.distance_robot_and_ball(robot, ball) == 0.0
+
+    robot = Robot(1, 1)
+    ball = Ball(2, 2)
+
+    assert calc.distance_robot_and_ball(robot, ball) == pytest.approx(1.41421356)
 
 
 def test_velocity_norm():
