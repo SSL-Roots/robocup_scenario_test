@@ -73,3 +73,34 @@ def test_robot_speed():
     observer.reset()
     assert observer.robot_speed().some_blue_robots_over(0.1) is False
     assert observer.robot_speed().some_yellow_robots_over(0.1) is False
+
+
+def test_customized():
+    # Note: The customized observer's tests are already covered in
+    # the test_customized_observer.py file.
+    observer = WorldObserver(
+        field_length=12.0, field_width=9.0, goal_width=1.8, goal_depth=0.18)
+
+    vision_world = VisionWorld()
+    vision_world._ball = [Ball(x=1.0, y=2.0)]
+    vision_world._yellow_robots[0] = Robot(x=0.0, y=0.0, id=0)
+    observer.update(vision_world)
+
+    def there_are_blue_robots(
+            ball: Ball, blue_robots, yellow_robots) -> bool:
+        if len(blue_robots) > 0:
+            return True
+        return False
+
+    observer.customized().register_sticky_true_callback(
+        "there_are_blue_robots", there_are_blue_robots)
+
+    observer.update(vision_world)
+    assert observer.customized().get_result("there_are_blue_robots") is False
+
+    vision_world._blue_robots[0] = Robot(x=0.0, y=0.0, id=0)
+    observer.update(vision_world)
+    assert observer.customized().get_result("there_are_blue_robots") is True
+
+    observer.reset()
+    assert observer.customized().get_result("there_are_blue_robots") is False

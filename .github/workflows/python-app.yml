@@ -51,6 +51,7 @@ jobs:
         coverage run --source=rcst --append -m pytest tests/test_ball_placement_observer.py
         coverage run --source=rcst --append -m pytest tests/test_robot_speed_observer.py
         coverage run --source=rcst --append -m pytest tests/test_calc.py
+        coverage run --source=rcst --append -m pytest tests/test_customized_observer.py
 
     - name: Start Docker Compose services
       run: docker compose -f .docker/consai-grsim-compose.yml up -d

@@ -14,10 +14,15 @@
 
 import math
 from .robot import Robot
+from .ball import Ball
 
 
 def distance(x1: float, y1: float, x2: float, y2: float) -> float:
     return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+
+
+def distance_robot_and_ball(robot: Robot, ball: Ball) -> float:
+    return distance(robot.x, robot.y, ball.x, ball.y)
 
 
 def velocity_norm(present: Robot, previous: Robot, dt: float) -> float:
