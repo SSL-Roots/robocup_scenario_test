@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from pathlib import Path
 import pytest
 from rcst.communication import Communication
 from rcst.logging import Recorder
@@ -87,4 +88,7 @@ def rcst_comm(rcst_config, request):
     comm_instance.change_referee_command('HALT', 0.1)
     comm_instance.stop_thread()
 
-    recorder.stop(request.node.name, save=request.node.rep_call.failed)
+    # e.g. test_scenario_halt.py::test_halt -> test_scenario_halt_test_halt
+    file_name = Path(request.node.fspath).stem + "_" + request.node.name
+
+    recorder.stop(file_name, save=request.node.rep_call.failed)
