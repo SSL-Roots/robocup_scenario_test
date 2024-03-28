@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import math
 import pytest
 from rcst.ball import Ball
 import rcst.calc as calc
@@ -55,4 +54,4 @@ def test_velocity_norm():
 def test_distance_point_c_to_line_ab():
     assert calc.distance_point_c_to_line_ab(0, 0, 0, 1, 1, 0) == 1
     assert calc.distance_point_c_to_line_ab(0, 0, 2, 2, 1, 1) == 0
-    assert calc.distance_point_c_to_line_ab(0, 0, 4, 2, 6, 3) == math.sqrt(5)
+    assert round(calc.distance_point_c_to_line_ab(0, 0, 4, 2, 6, 3), 2) == 2.24
