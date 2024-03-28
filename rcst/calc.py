@@ -38,21 +38,21 @@ def distance_point_c_to_line_ab(xa: float, ya: float, xb: float, yb: float, xc: 
     # 線分ABの方程式: y - ya = (yb - ya) / (xb - xa) * (x - xa)
     if xb - xa == 0:  # 線分が垂直の場合
         return abs(xc - xa)
-    
+
     a = (yb - ya) / (xb - xa)
     b = ya - a * xa
-    
+
     # 点Cから線分ABまでの距離d
     d = abs(a * xc - yc + b) / math.sqrt(a**2 + 1)
-    
+
     # 点Cが線分AB上にある場合
     if d == 0:
         x4 = xa + (xc - xa) * (xb - xa) / ((xb - xa)**2 + (yb - ya)**2)
         y4 = ya + (xc - xa) * (yb - ya) / ((xb - xa)**2 + (yb - ya)**2)
         d = math.sqrt((xc - x4)**2 + (yc - y4)**2)
-    
+
     # 点Cが延長線上にある場合
     elif d > math.sqrt((xc - xa)**2 + (yc - ya)**2) or d > math.sqrt((xc - xb)**2 + (yc - yb)**2):
         d = min(math.sqrt((xc - xa)**2 + (yc - ya)**2), math.sqrt((xc - xb)**2 + (yc - yb)**2))
-    
+
     return d
