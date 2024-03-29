@@ -47,12 +47,12 @@ def distance_point_c_to_line_ab(xa: float, ya: float, xb: float, yb: float, xc: 
         ab_is_not_line = True
 
     # ABが点 or 点CがA側
-    if ab_is_not_line or ACx * ABx + ACy * ABy < 0 :
+    if ab_is_not_line or ACx * ABx + ACy * ABy < 0:
         return (ACx * ACx + ACy * ACy)**0.5
     # 点CがB側
-    if BCx * BAx + BCy * BAy < 0 :
+    if BCx * BAx + BCy * BAy < 0:
         return (BCx * BCx + BCy * BCy)**0.5
 
-    s = abs(ACx * ABy - ACy * ABx)
-    l = (ABx * ABx + ABy * ABy)**0.5
-    return s/l
+    v_s = abs(ACx * ABy - ACy * ABx)
+    v_l = (ABx * ABx + ABy * ABy)**0.5
+    return v_s/v_l
