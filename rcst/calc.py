@@ -33,8 +33,10 @@ def velocity_norm(present: Robot, previous: Robot, dt: float) -> float:
     vy = (present.y - previous.y) / dt
     return math.sqrt(vx**2 + vy**2)
 
-def calc_vector(x0, y0, x1, y1) :
+
+def calc_vector(x0, y0, x1, y1):
     return x1-x0, y1-y0
+
 
 def distance_point_c_to_line_ab(xa: float, ya: float, xb: float, yb: float, xc: float, yc: float) -> float:
     ACx, ACy = calc_vector(xa, ya, xc, yc)
