@@ -56,3 +56,5 @@ def test_distance_point_c_to_line_ab():
     assert calc.distance_point_c_to_line_ab(0, 0, 2, 2, 1, 1) == 0
     assert round(calc.distance_point_c_to_line_ab(0, 0, 4, 2, 6, 3), 2) == 2.24
     assert calc.distance_point_c_to_line_ab(0, 0, 0, 0, 0, 1) == 1
+    assert calc.distance_point_c_to_line_ab(0, 0, 1, 0, 2, 0) == 1
+    assert calc.distance_point_c_to_line_ab(0, 0, 1, 0, -1, 0) == 1
