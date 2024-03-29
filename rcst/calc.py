@@ -33,23 +33,26 @@ def velocity_norm(present: Robot, previous: Robot, dt: float) -> float:
     vy = (present.y - previous.y) / dt
     return math.sqrt(vx**2 + vy**2)
 
+def calc_vector(x0, y0, x1, y1) :
+    return x1-x0, y1-y0
 
 def distance_point_c_to_line_ab(xa: float, ya: float, xb: float, yb: float, xc: float, yc: float) -> float:
-    # 線分ABの方程式: y - ya = (yb - ya) / (xb - xa) * (x - xa)
-    if xb - xa == 0:  # 線分が垂直の場合
-        return abs(xc - xa)
+    ACx, ACy = calc_vector(xa, ya, xc, yc)
+    ABx, ABy = calc_vector(xa, ya, xb, yb)
+    BCx, BCy = calc_vector(xb, yb, xc, yc)
+    BAx, BAy = calc_vector(xb, yb, xa, ya)
 
-    a = (yb - ya) / (xb - xa)
-    b = ya - a * xa
+    ab_is_not_line = False
+    if xa == xb and ya == yb:
+        ab_is_not_line = True
 
-    # 点Cから線分ABまでの距離d
-    d = abs(a * xc - yc + b) / math.sqrt(a**2 + 1)
+    # ABが点 or 点CがA側
+    if ab_is_not_line or ACx * ABx + ACy * ABy < 0 :
+        return (ACx * ACx + ACy * ACy)**0.5
+    # 点CがB側
+    if BCx * BAx + BCy * BAy < 0 :
+        return (BCx * BCx + BCy * BCy)**0.5
 
-    if d == 0:
-        return d
-
-    # 点Cが延長線上にある場合
-    if d > math.sqrt((xc - xa)**2 + (yc - ya)**2) or d > math.sqrt((xc - xb)**2 + (yc - yb)**2):
-        d = min(math.sqrt((xc - xa)**2 + (yc - ya)**2), math.sqrt((xc - xb)**2 + (yc - yb)**2))
-
-    return d
+    s = abs(ACx * ABy - ACy * ABx)
+    l = (ABx * ABx + ABy * ABy)**0.5
+    return s/l
