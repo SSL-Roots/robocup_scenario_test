@@ -34,7 +34,7 @@ def velocity_norm(present: Robot, previous: Robot, dt: float) -> float:
     return math.sqrt(vx**2 + vy**2)
 
 
-def calc_vector(x0, y0, x1, y1):
+def calc_vector(x0: float, y0: float, x1: float, y1: float) -> tuple[float, float]:
     return x1-x0, y1-y0
 
 
