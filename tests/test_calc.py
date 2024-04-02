@@ -51,10 +51,10 @@ def test_velocity_norm():
         calc.velocity_norm(present, prev, 0.0)
 
 
-def test_distance_point_c_to_line_ab():
-    assert calc.distance_point_c_to_line_ab(0, 0, 0, 1, 1, 0) == 1
-    assert calc.distance_point_c_to_line_ab(0, 0, 2, 2, 1, 1) == 0
-    assert round(calc.distance_point_c_to_line_ab(0, 0, 4, 2, 6, 3), 2) == 2.24
-    assert calc.distance_point_c_to_line_ab(0, 0, 0, 0, 0, 1) == 1
-    assert calc.distance_point_c_to_line_ab(0, 0, 1, 0, 2, 0) == 1
-    assert calc.distance_point_c_to_line_ab(0, 0, 1, 0, -1, 0) == 1
+def test_distance_line_ab_to_point_c():
+    assert calc.distance_line_ab_to_point_c(0, 0, 0, 1, 1, 0) == 1
+    assert calc.distance_line_ab_to_point_c(0, 0, 2, 2, 1, 1) == 0
+    assert round(calc.distance_line_ab_to_point_c(0, 0, 4, 2, 6, 3), 2) == 2.24
+    assert calc.distance_line_ab_to_point_c(0, 0, 0, 0, 0, 1) == 1
+    assert calc.distance_line_ab_to_point_c(0, 0, 1, 0, 2, 0) == 1
+    assert calc.distance_line_ab_to_point_c(0, 0, 1, 0, -1, 0) == 1
