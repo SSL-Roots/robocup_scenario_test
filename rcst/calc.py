@@ -48,7 +48,7 @@ def distance_line_ab_to_point_c(xa: float, ya: float, xb: float, yb: float, xc: 
     if xa == xb and ya == yb:
         ab_is_not_line = True
 
-    # AB is point or point C is A side
+    # AB is point or point C is the A side
     if ab_is_not_line or ACx * ABx + ACy * ABy < 0:
         return (ACx * ACx + ACy * ACy)**0.5
     # Point C is the B side
