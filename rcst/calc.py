@@ -38,7 +38,7 @@ def calc_vector(x0: float, y0: float, x1: float, y1: float) -> tuple[float, floa
     return x1-x0, y1-y0
 
 
-def distance_point_c_to_line_ab(xa: float, ya: float, xb: float, yb: float, xc: float, yc: float) -> float:
+def distance_line_ab_to_point_c(xa: float, ya: float, xb: float, yb: float, xc: float, yc: float) -> float:
     ACx, ACy = calc_vector(xa, ya, xc, yc)
     ABx, ABy = calc_vector(xa, ya, xb, yb)
     BCx, BCy = calc_vector(xb, yb, xc, yc)
