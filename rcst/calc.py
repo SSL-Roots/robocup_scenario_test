@@ -48,7 +48,7 @@ def distance_point_c_to_line_ab(xa: float, ya: float, xb: float, yb: float, xc: 
     if xa == xb and ya == yb:
         ab_is_not_line = True
 
-    # ABが点 or 点CがA側
+    # AB is point or point C is A side
     if ab_is_not_line or ACx * ABx + ACy * ABy < 0:
         return (ACx * ACx + ACy * ACy)**0.5
     # 点CがB側
